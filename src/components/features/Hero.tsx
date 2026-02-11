@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSettings } from "@/context/SettingsContext";
 import { motion } from "framer-motion";
 import { BookOpen } from "lucide-react";
@@ -19,75 +20,111 @@ export function Hero() {
             {/* Background: Center Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-200/20 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4 space-y-10">
+            <div className="relative z-10 flex flex-col items-center max-w-6xl mx-auto px-4 w-full">
 
-                {/* 1. 3D Book Element - Centered Top */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20, rotateY: -10 }}
-                    animate={{ opacity: 1, y: 0, rotateY: 0 }}
-                    transition={{ duration: 1, delay: 0.1 }}
-                    className="relative flex justify-center perspective-1000 mb-2"
-                >
-                    {/* 3D Book Container - Scaled Down 30% */}
-                    <div className="relative w-[150px] h-[225px] md:w-[180px] md:h-[270px] bg-primary rounded-r-xl rounded-l-sm shadow-2xl transform rotate-y-[-10deg] hover:rotate-y-0 transition-transform duration-700 ease-out cursor-pointer group origin-left">
-                        {/* Book Spine */}
-                        <div className="absolute left-0 top-0 bottom-0 w-[20px] bg-[#146a94] transform -translate-x-full origin-right rotate-y-[-90deg] rounded-l-md" />
+                {/* Two-column layout: Book (left) | Titles (right) */}
+                <div className="flex flex-col md:flex-row items-center justify-center w-full gap-8 md:gap-16">
 
-                        {/* Book Cover Design */}
-                        <div className="absolute inset-0 border-t-2 border-b-2 border-r-2 border-[#ffffff]/20 rounded-r-xl flex flex-col items-center justify-center p-4 text-white">
-                            <div className="w-full h-full border border-white/30 rounded-r-lg flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
-                                <h2 className="font-telugu text-xl font-bold text-center z-10 leading-snug">
-                                    పరాత్పర<br />శతకం
-                                </h2>
+                    {/* LEFT HALF: 3D Book Element */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -40, rotateY: -10 }}
+                        animate={{ opacity: 1, x: 0, rotateY: 0 }}
+                        transition={{ duration: 1, delay: 0.1 }}
+                        className="relative flex justify-center items-center perspective-1000 md:w-1/2 shrink-0"
+                    >
+                        <div className="relative" style={{ perspective: '1000px' }}>
+                            <div style={{ transform: 'rotateY(-15deg)', transformOrigin: 'left center' }} className="transition-transform duration-700 ease-out hover:rotate-y-0 cursor-pointer">
+                                {/* Main book face */}
+                                <div className="relative w-[200px] h-[300px] md:w-[270px] md:h-[405px] bg-[#0c4694] overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.3)] border border-[#093576]/50">
+
+                                    {/* Cover image */}
+                                    <div className="absolute inset-0 flex items-end justify-start pl-4 pb-3 z-10">
+                                        <div className="relative w-[90%] h-[90%]">
+                                            <Image
+                                                src="/blue title.png"
+                                                alt="Paratpara Satakam Book Cover"
+                                                fill
+                                                className="object-contain"
+                                                priority
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Pages - refined inset look with Cascade Lift animation */}
+                                    <div className="absolute right-[2px] top-[4px] bottom-[4px] w-[12px] z-20 overflow-hidden">
+                                        {[0, 1, 2, 3, 4].map((i) => (
+                                            <motion.div
+                                                key={i}
+                                                className="absolute top-0 bottom-0"
+                                                style={{
+                                                    right: i * 2,
+                                                    width: '2px',
+                                                    backgroundColor: i % 2 === 0 ? '#F5F0E8' : '#EDE7DA',
+                                                    boxShadow: i === 0 ? '-1px 0 1px rgba(0,0,0,0.05)' : 'none',
+                                                }}
+                                                animate={{ x: [0, -4, -2, 0] }}
+                                                transition={{
+                                                    duration: 4,
+                                                    repeat: Infinity,
+                                                    ease: "easeInOut",
+                                                    delay: i * 0.6
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
+
+                            {/* Spine */}
+                            <div
+                                className="absolute left-0 top-0 bottom-0 w-[22px] bg-[#093576]"
+                                style={{ transform: 'translateX(-100%) rotateY(-90deg)', transformOrigin: 'right center' }}
+                            />
+
+                            {/* Shadow underneath */}
+                            <div className="absolute bottom-[-25px] left-1/2 -translate-x-1/2 w-[70%] h-[15px] bg-black/20 blur-xl rounded-[100%]" />
                         </div>
+                    </motion.div>
 
-                        {/* Pages Effect */}
-                        <div className="absolute right-1 top-1 bottom-1 w-[6px] bg-white/90 rounded-r shadow-inner" />
-                    </div>
+                    {/* RIGHT HALF: Titles + Author */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="md:w-1/2 space-y-5 text-center md:text-left"
+                    >
+                        {/* Telugu Title */}
+                        <h1 className="font-telugu text-6xl md:text-8xl font-bold text-gray-900 leading-tight">
+                            పరాత్పరశతకం
+                        </h1>
 
-                    {/* Shadow underneath */}
-                    <div className="absolute bottom-[-30px] w-[60%] h-[15px] bg-black/20 blur-xl rounded-[100%]" />
-                </motion.div>
+                        {/* English Title */}
+                        <h2 className="font-sans text-3xl md:text-5xl font-bold text-primary tracking-tight">
+                            Paratparasatakam
+                        </h2>
 
-                {/* 2. Text Content */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="space-y-4 max-w-2xl"
-                >
-                    {/* Telugu Title */}
-                    <h1 className="font-telugu text-6xl md:text-7xl font-bold text-gray-900 leading-tight">
-                        పరాత్పరశతకం
-                    </h1>
+                        {/* Author */}
+                        <p className="font-serif italic text-xl md:text-2xl text-gray-500 pt-2">
+                            by [Author Name]
+                        </p>
 
-                    {/* English Title */}
-                    <h2 className="font-sans text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                        Paratparasatakam
-                    </h2>
+                        {/* Description */}
+                        <p className="font-sans text-lg md:text-xl text-gray-600 leading-relaxed pt-3">
+                            A classical journey through divine Telugu poetry. Immerse yourself in verses that bridge the earthly and the eternal.
+                        </p>
+                    </motion.div>
 
-                    {/* Author */}
-                    <p className="font-serif italic text-lg text-gray-500 pt-2">
-                        by [Author Name]
-                    </p>
+                </div>
 
-                    {/* Description - Using hardcoded text as per design request */}
-                    <p className="font-sans text-lg text-gray-600 leading-relaxed pt-4">
-                        A classical journey through divine Telugu poetry. Immerse yourself in verses that bridge the earthly and the eternal.
-                    </p>
-                </motion.div>
-
-                {/* 3. Buttons */}
+                {/* Buttons - Centered below the two-column layout */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.5 }}
-                    className="flex flex-wrap items-center justify-center gap-4 pt-2"
+                    className="flex flex-wrap items-center justify-center gap-4 pt-20"
                 >
                     {/* Read Now (Primary) */}
-                    <Link href="/read" className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-medium shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                    <Link href="/read" className="bg-[#0c4694] hover:bg-[#093576] text-white px-8 py-3 rounded-xl font-medium shadow-xl shadow-[#0c4694]/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                         {t("read.cta")} <BookOpen className="w-4 h-4" />
                     </Link>
 
