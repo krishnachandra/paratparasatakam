@@ -3,6 +3,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { SettingsProvider, useSettings } from "@/context/SettingsContext";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 function AboutContent() {
     const { t } = useSettings();
@@ -20,11 +21,16 @@ function AboutContent() {
                     transition={{ duration: 0.8 }}
                     className="sticky top-24"
                 >
-                    <div className="aspect-[3/4] bg-stone-200 dark:bg-stone-800 rounded-lg overflow-hidden shadow-xl border-4 border-white dark:border-stone-700 mx-auto w-full max-w-[300px] flex items-center justify-center relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent mix-blend-overlay" />
-                        <span className="font-serif italic text-muted-foreground text-center px-4">
-                            Portrait of the Great Poet<br />(Coming Soon)
-                        </span>
+                    <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-xl border-4 border-white dark:border-stone-700 mx-auto w-full max-w-[300px] group">
+                        <Image
+                            src="/author.JPG"
+                            alt="Portrait of Jagarlapudi Lakshmi Narayana"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            sizes="(max-width: 768px) 100vw, 300px"
+                            priority
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60" />
                     </div>
                 </motion.div>
 

@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   description: "A Neo-Classical digital sanctuary for spiritual Telugu poetry.",
 };
 
+import { AudioProvider } from "@/context/AudioContext";
+import { AudioPlayer } from "@/components/ui/AudioPlayer";
+import { SettingsProvider } from "@/context/SettingsContext"; // Assuming SettingsContext exists based on PoemCard usage
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +42,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${ramabhadra.variable} antialiased font-sans`}
       >
-        {children}
+        <SettingsProvider>
+          <AudioProvider>
+            {children}
+            <AudioPlayer />
+          </AudioProvider>
+        </SettingsProvider>
       </body>
     </html>
   );

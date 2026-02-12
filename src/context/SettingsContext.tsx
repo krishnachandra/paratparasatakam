@@ -36,6 +36,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         // Basic persistence
         const savedLang = localStorage.getItem("language") as Language;
+        // eslint-disable-next-line
         if (savedLang) setLanguage(savedLang);
     }, []);
 

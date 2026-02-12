@@ -50,7 +50,7 @@ export default function ReaderPage() {
                             drag="x"
                             dragConstraints={{ left: 0, right: 0 }}
                             dragElastic={0.2}
-                            onDragEnd={(e: any, { offset, velocity }: any) => {
+                            onDragEnd={(e, { offset }) => {
                                 const swipe = offset.x;
                                 if (swipe < -100) {
                                     nextPoem();

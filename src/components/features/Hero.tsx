@@ -9,6 +9,8 @@ import { BookOpen } from "lucide-react";
 export function Hero() {
     const { t } = useSettings();
 
+
+
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 overflow-hidden bg-[#FDFBF7]">
 
@@ -95,7 +97,7 @@ export function Hero() {
                     >
                         {/* Telugu Title */}
                         <h1 className="font-telugu text-6xl md:text-8xl font-bold text-gray-900 leading-tight">
-                            పరాత్పరశతకం
+                            పరాత్పర శతకం
                         </h1>
 
                         {/* English Title */}
@@ -105,7 +107,7 @@ export function Hero() {
 
                         {/* Author */}
                         <p className="font-serif italic text-xl md:text-2xl text-gray-500 pt-2">
-                            by [Author Name]
+                            by Jagarlapudi Lakshmi Narayana
                         </p>
 
                         {/* Description */}
@@ -127,6 +129,8 @@ export function Hero() {
                     <Link href="/read" className="bg-[#0c4694] hover:bg-[#093576] text-white px-8 py-3 rounded-xl font-medium shadow-xl shadow-[#0c4694]/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                         {t("read.cta")} <BookOpen className="w-4 h-4" />
                     </Link>
+
+
 
                     {/* Foreword (Secondary) */}
                     <Link href="/foreword" className="bg-[#EAE4D9] hover:bg-[#E0D8C8] text-[#5A5448] px-8 py-3 rounded-xl font-medium transition-all hover:scale-105 active:scale-95">

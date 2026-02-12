@@ -4,15 +4,36 @@ import { Poem } from "@/data/poems";
 import { useSettings } from "@/context/SettingsContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, ChevronUp, BookOpen } from "lucide-react";
+import { ChevronDown, ChevronUp, BookOpen, PlayCircle, PauseCircle } from "lucide-react";
+import { useAudio } from "@/context/AudioContext";
 
 interface PoemCardProps {
     poem: Poem;
 }
 
 export function PoemCard({ poem }: PoemCardProps) {
-    const { language, t } = useSettings();
+    const { language } = useSettings();
     const [showMeaning, setShowMeaning] = useState(false);
+    const { playTrack, currentTrack, isPlaying, togglePlay } = useAudio();
+
+    // Placeholder audio URL - using a reliable generic sample for now
+    // In production, this would come from the poem object: poem.audioUrl
+    const audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+
+    const isCurrentTrack = currentTrack?.src === audioUrl;
+    const isPlayingCurrent = isCurrentTrack && isPlaying;
+
+    const handlePlay = () => {
+        if (isCurrentTrack) {
+            togglePlay();
+        } else {
+            playTrack({
+                title: `Verse ${poem.id}`,
+                src: audioUrl,
+                author: "Paratparasatakam"
+            });
+        }
+    };
 
     return (
         <div className="w-full max-w-2xl mx-auto px-4 md:px-0 perspective-1000">
@@ -28,7 +49,20 @@ export function PoemCard({ poem }: PoemCardProps) {
                     <span className="font-serif text-primary font-bold tracking-wider text-sm">
                         VERSE {poem.id}
                     </span>
-                    <BookOpen className="w-4 h-4 text-primary/40" />
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handlePlay}
+                            className="text-primary/70 hover:text-primary transition-colors hover:scale-110 active:scale-95 transform duration-200"
+                            title="Play Recitation"
+                        >
+                            {isPlayingCurrent ? (
+                                <PauseCircle className="w-6 h-6" />
+                            ) : (
+                                <PlayCircle className="w-6 h-6" />
+                            )}
+                        </button>
+                        <BookOpen className="w-4 h-4 text-primary/40" />
+                    </div>
                 </div>
 
                 {/* Main Content (The Poem) */}

@@ -1,12 +1,14 @@
 "use client";
 
 import { useSettings } from "@/context/SettingsContext";
-import { BookOpen, Globe } from "lucide-react";
+import { BookOpen, Globe, PlayCircle } from "lucide-react";
+import { useAudio } from "@/context/AudioContext";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 
 export function Navbar() {
     const { language, setLanguage, t } = useSettings();
+    const { currentTrack, playTrack } = useAudio();
 
     const toggleLanguage = () => {
         setLanguage(language === "en" ? "te" : "en");
@@ -43,6 +45,21 @@ export function Navbar() {
                             {language}
                         </span>
                     </button>
+
+                    {/* Play Button - Only shows when player is closed */}
+                    {!currentTrack && (
+                        <button
+                            onClick={() => playTrack({
+                                title: "Paratparasatakam - Intro",
+                                src: "/Sri Nilayundu.m4a",
+                                author: "Jagarlapudi Lakshmi Narayana"
+                            })}
+                            className="flex items-center justify-center p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200 transition-colors"
+                            aria-label="Play Audio"
+                        >
+                            <PlayCircle className="w-5 h-5" />
+                        </button>
+                    )}
 
                     <Link href="/read" className="hidden sm:inline-flex bg-primary text-white px-5 py-2 rounded-lg font-medium text-sm hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 transition-all">
                         {t("read.cta")}

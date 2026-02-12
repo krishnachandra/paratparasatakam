@@ -1,7 +1,9 @@
-"use client";
-
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/features/Hero";
+import { ExploreSection } from "@/components/features/ExploreSection";
+import { EventGallery } from "@/components/features/EventGallery";
+import { QuoteSection } from "@/components/features/QuoteSection";
+import { Footer } from "@/components/layout/Footer";
 import { SettingsProvider } from "@/context/SettingsContext";
 
 export default function Home() {
@@ -10,9 +12,10 @@ export default function Home() {
       <main className="min-h-screen flex flex-col bg-background text-foreground">
         <Navbar />
         <Hero />
-
-        {/* Placeholder for future sections */}
-        <div className="h-20" />
+        <ExploreSection />
+        <EventGallery />
+        <QuoteSection />
+        <Footer />
       </main>
     </SettingsProvider>
   );
