@@ -2,20 +2,20 @@
 
 :root {
   /* Brand Palette */
-  --primary: #1A84B8; /* Divine Blue */
-  
+  --primary: #1A84B8;
+  /* Divine Blue */
+
   /* Light Mode (Parchment) */
-  --background: #F9F7F1; 
-  --foreground: #333333; /* Charcoal */
+  --background: #F9F7F1;
+  --foreground: #333333;
+  /* Charcoal */
   --muted: #888888;
   --card: #ffffff;
   --card-foreground: #333333;
   --border: #e5e5e5;
-  
+
   /* Typography Variables (Values set in layout.tsx) */
-  --font-telugu: var(--font-ramabhadra);
-  --font-serif: var(--font-playfair);
-  --font-sans: var(--font-inter);
+  /* Fonts are injected by Next.js via CSS variables */
 }
 
 @theme inline {
@@ -26,16 +26,18 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-border: var(--border);
-  
-  --font-telugu: var(--font-ramabhadra);
+
+  --font-telugu: var(--font-kalaanja);
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
+  --font-kalaanja: var(--font-kalaanja);
+  --font-kranthi: var(--font-kranthi);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     /* Cosmic Night Mode */
-    --background: #0F172A; 
+    --background: #0F172A;
     --foreground: #F1F5F9;
     --muted: #94A3B8;
     --card: #1E293B;

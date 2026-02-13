@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Ramabhadra } from "next/font/google"; // 1. Import Fonts
+import { Inter, Playfair_Display, Ramabhadra } from "next/font/google";
+import localFont from "next/font/local"; // 1. Import Fonts
 import "./globals.css";
 
 // 2. Configure Fonts
@@ -22,6 +23,18 @@ const ramabhadra = Ramabhadra({
   display: "swap",
 });
 
+const kalaanja = localFont({
+  src: "./fonts/Kalaanja.woff2",
+  variable: "--font-kalaanja",
+  display: "swap",
+});
+
+const kranthi = localFont({
+  src: "./fonts/Kranthi_.woff2", // Note the underscore in filename
+  variable: "--font-kranthi",
+  display: "swap",
+});
+
 // 3. Metadata
 export const metadata: Metadata = {
   title: "Paratparasatakam",
@@ -29,8 +42,8 @@ export const metadata: Metadata = {
 };
 
 import { AudioProvider } from "@/context/AudioContext";
-import { AudioPlayer } from "@/components/ui/AudioPlayer";
-import { SettingsProvider } from "@/context/SettingsContext"; // Assuming SettingsContext exists based on PoemCard usage
+import { AudioPlayerLayoutWrapper } from "@/components/layout/AudioPlayerLayoutWrapper";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 export default function RootLayout({
   children,
@@ -38,14 +51,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${playfair.variable} ${ramabhadra.variable} antialiased font-sans`}
-      >
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${ramabhadra.variable} ${kalaanja.variable} ${kranthi.variable}`}>
+      <body className="antialiased font-sans">
         <SettingsProvider>
           <AudioProvider>
             {children}
-            <AudioPlayer />
+            <AudioPlayerLayoutWrapper />
           </AudioProvider>
         </SettingsProvider>
       </body>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSettings } from "@/context/SettingsContext";
 import { motion } from "framer-motion";
-import { BookOpen } from "lucide-react";
+import { BookOpen, ArrowRight } from "lucide-react";
 
 export function Hero() {
     const { t } = useSettings();
@@ -12,7 +12,7 @@ export function Hero() {
 
 
     return (
-        <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 overflow-hidden bg-[#FDFBF7]">
+        <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 overflow-hidden bg-[#fef4ea]">
 
             {/* Background: Grid Pattern */}
             <div className="absolute inset-0 z-0 opacity-[0.4]"
@@ -37,13 +37,13 @@ export function Hero() {
                         <div className="relative" style={{ perspective: '1000px' }}>
                             <div style={{ transform: 'rotateY(-15deg)', transformOrigin: 'left center' }} className="transition-transform duration-700 ease-out hover:rotate-y-0 cursor-pointer">
                                 {/* Main book face */}
-                                <div className="relative w-[200px] h-[300px] md:w-[270px] md:h-[405px] bg-[#0c4694] overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.3)] border border-[#093576]/50">
+                                <div className="relative w-[200px] h-[300px] md:w-[270px] md:h-[405px] bg-[#17769a] overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.3)] border border-[#125c78]/50">
 
                                     {/* Cover image */}
-                                    <div className="absolute inset-0 flex items-end justify-start pl-4 pb-3 z-10">
-                                        <div className="relative w-[90%] h-[90%]">
+                                    <div className="absolute inset-0 flex items-center justify-center z-10">
+                                        <div className="relative w-[70%] h-[70%] mt-[10%]">
                                             <Image
-                                                src="/blue title.png"
+                                                src="/book-cover-flute.png"
                                                 alt="Paratpara Satakam Book Cover"
                                                 fill
                                                 className="object-contain"
@@ -79,7 +79,7 @@ export function Hero() {
 
                             {/* Spine */}
                             <div
-                                className="absolute left-0 top-0 bottom-0 w-[22px] bg-[#093576]"
+                                className="absolute left-0 top-0 bottom-0 w-[22px] bg-[#125c78]"
                                 style={{ transform: 'translateX(-100%) rotateY(-90deg)', transformOrigin: 'right center' }}
                             />
 
@@ -93,16 +93,23 @@ export function Hero() {
                         initial={{ opacity: 0, x: 40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="md:w-1/2 space-y-5 text-center md:text-left"
+                        className="md:w-1/2 space-y-1 text-center md:text-left"
                     >
                         {/* Telugu Title */}
-                        <h1 className="font-telugu text-6xl md:text-8xl font-bold text-gray-900 leading-tight">
-                            పరాత్పర శతకం
-                        </h1>
+                        {/* Telugu Title Image */}
+                        <div className="relative w-64 h-14 md:w-[400px] md:h-24 mx-auto md:mx-0">
+                            <Image
+                                src="/Title.png"
+                                alt="పరాత్పర శతకం"
+                                fill
+                                className="object-contain object-left"
+                                priority
+                            />
+                        </div>
 
                         {/* English Title */}
-                        <h2 className="font-sans text-3xl md:text-5xl font-bold text-primary tracking-tight">
-                            Paratparasatakam
+                        <h2 className="font-sans text-3xl md:text-5xl font-bold text-black tracking-tight">
+                            Paratpara Satakam
                         </h2>
 
                         {/* Author */}
@@ -126,8 +133,8 @@ export function Hero() {
                     className="flex flex-wrap items-center justify-center gap-4 pt-20"
                 >
                     {/* Read Now (Primary) */}
-                    <Link href="/read" className="bg-[#0c4694] hover:bg-[#093576] text-white px-8 py-3 rounded-xl font-medium shadow-xl shadow-[#0c4694]/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                        {t("read.cta")} <BookOpen className="w-4 h-4" />
+                    <Link href="/viewer" className="bg-[#17769a] hover:bg-[#125c78] text-white px-8 py-3 rounded-xl font-medium shadow-xl shadow-[#17769a]/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                        {t("read.cta")} <ArrowRight className="w-4 h-4" />
                     </Link>
 
 

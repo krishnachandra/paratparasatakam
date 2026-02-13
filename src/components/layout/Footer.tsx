@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, Twitter, Facebook, Instagram } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export function Footer() {
     return (
@@ -8,13 +8,8 @@ export function Footer() {
 
                 {/* Brand */}
                 <div className="flex flex-col items-center mb-8">
-                    <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4 text-white">
-                        <BookOpen className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">Paratparasatakam</h2>
-                    <p className="text-gray-500 max-w-sm">
-                        Preserving the heritage of classical Telugu literature for the digital age.
-                    </p>
+                    <h1 className="font-telugu text-3xl font-bold text-gray-900 mb-2">పరాత్పర శతకం</h1>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">Paratpara Satakam</h2>
                 </div>
 
                 {/* Links */}
@@ -27,20 +22,14 @@ export function Footer() {
 
                 {/* Social Icons */}
                 <div className="flex gap-6 mb-8">
-                    <Link href="#" className="p-2 bg-gray-50 hover:bg-blue-50 text-gray-400 hover:text-blue-600 rounded-full transition-colors duration-300">
-                        <Twitter className="w-5 h-5" />
-                    </Link>
-                    <Link href="#" className="p-2 bg-gray-50 hover:bg-blue-50 text-gray-400 hover:text-blue-600 rounded-full transition-colors duration-300">
-                        <Facebook className="w-5 h-5" />
-                    </Link>
-                    <Link href="#" className="p-2 bg-gray-50 hover:bg-blue-50 text-gray-400 hover:text-blue-600 rounded-full transition-colors duration-300">
-                        <Instagram className="w-5 h-5" />
+                    <Link href="mailto:contact@paratparasatakam.com" className="p-2 bg-gray-50 hover:bg-blue-50 text-gray-400 hover:text-blue-600 rounded-full transition-colors duration-300">
+                        <Mail className="w-5 h-5" />
                     </Link>
                 </div>
 
                 {/* Copyright */}
                 <div className="text-sm text-gray-400 border-t border-gray-100 pt-8 w-full">
-                    <p>&copy; {new Date().getFullYear()} Paratparasatakam Project. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Paratpara Satakam. All rights reserved.</p>
                 </div>
             </div>
         </footer>

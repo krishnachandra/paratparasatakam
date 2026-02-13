@@ -3,7 +3,7 @@ export function EventGallery() {
         { id: "LXb3EKWsInQ", title: "Launch Ceremony Highlights" },
         { id: "ysz5S6P_ks0", title: "Keynote Address" },
         { id: "jNQXAC9IVRw", title: "Author Interview" },
-        { id: "9bZkp7q19f0", title: "Cultural Performance" },
+        { id: "MZnGValsZps", title: "Cultural Performance" },
     ];
 
     return (

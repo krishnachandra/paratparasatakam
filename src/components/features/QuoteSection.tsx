@@ -2,7 +2,7 @@ import { Quote } from 'lucide-react';
 
 export function QuoteSection() {
     return (
-        <section className="bg-[#0c4694] py-24 text-white text-center relative overflow-hidden">
+        <section className="bg-[#20809D] py-24 text-white text-center relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10 pointer-events-none"
                 style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
