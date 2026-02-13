@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Document, Page, pdfjs } from 'react-pdf';
+import dynamic from "next/dynamic";
+
+const Document = dynamic(() => import('react-pdf').then(mod => mod.Document), {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-96 w-64 mx-auto rounded"></div>
+});
+
+const Page = dynamic(() => import('react-pdf').then(mod => mod.Page), {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-100 h-96 w-full"></div>
+});
 import {
     Download, Bookmark, Share2, MoreVertical, Search, Maximize,
     Printer, Code, Sparkles, ThumbsUp, ThumbsDown, Flag, ChevronDown, ChevronUp, ChevronsUp, ChevronsDown,
@@ -11,10 +21,12 @@ import { Navbar } from "@/components/layout/Navbar";
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// Configure PDF worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
 export default function DocumentViewerPage() {
+    useEffect(() => {
+        import('react-pdf').then(({ pdfjs }) => {
+            pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+        });
+    }, []);
     const pdfUrl = "/Paratpara Satakam Book_Inner_FSr.indd.pdf";
     const [numPages, setNumPages] = useState<number>(0);
     const [pageNumber, setPageNumber] = useState<number>(1);

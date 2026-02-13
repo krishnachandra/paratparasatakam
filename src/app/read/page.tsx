@@ -5,14 +5,26 @@ import { Navbar } from "@/components/layout/Navbar";
 import { SettingsProvider } from "@/context/SettingsContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { Document, Page, pdfjs } from 'react-pdf';
+import dynamic from "next/dynamic";
+
+const Document = dynamic(() => import('react-pdf').then(mod => mod.Document), {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-96 w-64 mx-auto rounded"></div>
+});
+
+const Page = dynamic(() => import('react-pdf').then(mod => mod.Page), {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-100 h-96 w-full"></div>
+});
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// Configure PDF worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
 export default function ReaderPage() {
+    useEffect(() => {
+        import('react-pdf').then(({ pdfjs }) => {
+            pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+        });
+    }, []);
 
     // ----------------------------------------------------------------------------------
     // CHANGE THIS FILENAME IF YOU UPLOAD A NEW PDF
