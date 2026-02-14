@@ -37,7 +37,7 @@ const kranthi = localFont({
 
 // 3. Metadata
 export const metadata: Metadata = {
-  title: "Paratparasatakam",
+  title: "పరాత్పర శతకం - Paratpara Satakam",
   description: "A Neo-Classical digital sanctuary for spiritual Telugu poetry.",
   icons: {
     icon: '/favicon.png', // Using .png since you provided an image
