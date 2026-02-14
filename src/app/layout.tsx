@@ -39,6 +39,11 @@ const kranthi = localFont({
 export const metadata: Metadata = {
   title: "Paratparasatakam",
   description: "A Neo-Classical digital sanctuary for spiritual Telugu poetry.",
+  icons: {
+    icon: '/favicon.png', // Using .png since you provided an image
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 import { AudioProvider } from "@/context/AudioContext";
