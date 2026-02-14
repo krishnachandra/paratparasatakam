@@ -64,12 +64,13 @@ export function Navbar() {
                     <NavLink href="/" label={t("nav.home")} />
                     <NavLink href="/foreword" label={t("nav.foreword")} />
                     <NavLink href="/about" label={t("nav.about")} />
+                    <NavLink href="/padyams" label={t("nav.padyams")} />
                 </div>
 
                 {/* Actions */}
                 <div className="flex items-center space-x-4">
                     {/* Play Button - Only shows when player is closed */}
-                    {!currentTrack && (
+                    {!currentTrack && pathname !== '/padyams' && (
                         <button
                             onClick={() => playTrack({
                                 title: "Paratparasatakam - Intro",

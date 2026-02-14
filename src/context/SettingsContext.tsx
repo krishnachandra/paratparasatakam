@@ -21,6 +21,7 @@ const translations: Record<string, Record<Language, string>> = {
     "nav.foreword": { en: "Foreword", te: "ముందుమాట" },
     "nav.about": { en: "About Author", te: "కవి గురించి" },
     "hero.title": { en: "Paratparasatakam", te: "పరాత్పర శతకం" },
+    "nav.padyams": { en: "Padyams in Action", te: "పద్య విన్యాసం" },
     "hero.subtitle": {
         en: "A Neo-Classical journey through divine Telugu poetry.",
         te: "తెలుగు పద్య కవిత్వంలో ఒక అద్భుత ప్రయాణం."

@@ -1,9 +1,9 @@
 export function EventGallery() {
     const videos = [
-        { id: "LXb3EKWsInQ", title: "Launch Ceremony Highlights" },
-        { id: "ysz5S6P_ks0", title: "Keynote Address" },
-        { id: "jNQXAC9IVRw", title: "Author Interview" },
-        { id: "MZnGValsZps", title: "Cultural Performance" },
+        { id: "5WvW1J7j13o", title: "Paratpara Satakam Book Release Event - Part 1" },
+        { id: "NUJmTUxzqyM", title: "Paratpara Satakam Book Release Event - Part 2" },
+        { id: "6bD4S_R60oQ", title: "Concert by Shri Bhagi Narayana Sastry & Team" },
+        { id: "Ni9R5v-24-Q", title: "Carnatic Concert by J. Sriram & Team" },
     ];
 
     return (
@@ -39,14 +39,20 @@ export function EventGallery() {
                                 <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                                     {video.title}
                                 </h3>
-                                <p className="text-sm text-gray-500 mt-1">Official Launch Event • Hyderabad</p>
+                                <p className="text-sm text-gray-500 mt-1">Official Launch Event • Bandlaguda, Nagole • Hyderabad • 08 Nov 2025</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {/* View All Button */}
-                <div className="mt-16 text-center">
+                <div className="mt-16 text-center space-x-4">
+                    <a
+                        href="/padyams"
+                        className="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-colors duration-200"
+                    >
+                        View Paratpara Sataka Padyams
+                    </a>
                     <a
                         href="https://www.youtube.com"
                         target="_blank"

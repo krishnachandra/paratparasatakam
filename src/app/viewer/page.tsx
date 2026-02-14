@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
 
 const Document = dynamic(() => import('react-pdf').then(mod => mod.Document), {
     ssr: false,
@@ -13,20 +15,24 @@ const Page = dynamic(() => import('react-pdf').then(mod => mod.Page), {
     loading: () => <div className="animate-pulse bg-gray-100 h-96 w-full"></div>
 });
 import {
-    Download, Bookmark, Share2, MoreVertical, Search, Maximize,
+    Download, Bookmark, Share2, MoreVertical, Search, Maximize, Minimize,
     Printer, Code, Sparkles, ThumbsUp, ThumbsDown, Flag, ChevronDown, ChevronUp, ChevronsUp, ChevronsDown,
-    Filter, Pencil
+    Filter, Pencil, Facebook, Linkedin, Mail, Copy, Check, Link as LinkIcon, ZoomIn, ZoomOut
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
+import { useAudio } from "@/context/AudioContext";
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 export default function DocumentViewerPage() {
+    const { setIsPlaying } = useAudio();
+
     useEffect(() => {
+        setIsPlaying(false);
         import('react-pdf').then(({ pdfjs }) => {
             pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
         });
-    }, []);
+    }, [setIsPlaying]);
     const pdfUrl = "/Paratpara Satakam Book_Inner_FSr.indd.pdf";
     const [numPages, setNumPages] = useState<number>(0);
     const [pageNumber, setPageNumber] = useState<number>(1);
@@ -34,6 +40,27 @@ export default function DocumentViewerPage() {
     const [containerWidth, setContainerWidth] = useState<number>(800);
     const isProgrammaticScroll = useRef(false);
     const pageVisibility = useRef(new Map<number, number>());
+    const [isShareOpen, setIsShareOpen] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [isFullScreen, setIsFullScreen] = useState(false);
+    const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+    const [scale, setScale] = useState(1.0);
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    useEffect(() => {
+        // Trigger resize calculation when fullscreen mode toggles
+        const timer = setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+        }, 100);
+        return () => clearTimeout(timer);
+    }, [isFullScreen]);
+
+
 
     const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
         setNumPages(numPages);
@@ -103,7 +130,7 @@ export default function DocumentViewerPage() {
 
     return (
         <div className="h-screen bg-[#F4F4F4] text-gray-800 font-sans flex flex-col antialiased overflow-hidden">
-            <Navbar /> {/* Use our main Navbar */}
+            {!isFullScreen && <Navbar />} {/* Use our main Navbar */}
 
             {/* 3-Column Layout Container - Takes remaining height */}
             <div className="flex flex-1 overflow-hidden w-full max-w-[1920px] mx-auto relative">
@@ -111,72 +138,74 @@ export default function DocumentViewerPage() {
                 {/* --------------------------------------------------------
                     COLUMN 1: Metadata & Actions (Left Sidebar)
                    -------------------------------------------------------- */}
-                <aside className="w-[300px] bg-white overflow-y-auto hidden lg:flex flex-col p-6 border-r border-gray-200 z-10">
+                {!isFullScreen && (
+                    <aside className="w-[300px] bg-white overflow-y-auto hidden lg:flex flex-col p-6 border-r border-gray-200 z-10">
 
-                    {/* Stats Line */}
-                    <div className="flex items-center gap-2 text-[11px] font-semibold text-gray-500 mb-2">
-                        <div className="flex items-center">
-                            <ThumbsUp size={12} className="mr-1" />
-                            <span>100%</span>
-                            <span className="mx-1">(1)</span>
+                        {/* Stats Line */}
+                        <div className="flex items-center gap-2 text-[11px] font-semibold text-gray-500 mb-2">
+                            <div className="flex items-center">
+                                <ThumbsUp size={12} className="mr-1" />
+                                <span>100%</span>
+                                <span className="mx-1">(1)</span>
+                            </div>
+                            <span>•</span>
+                            <span>2K views</span>
+                            <span>•</span>
+                            <span>{numPages} pages</span>
                         </div>
-                        <span>•</span>
-                        <span>2K views</span>
-                        <span>•</span>
-                        <span>{numPages} pages</span>
-                    </div>
 
-                    {/* Title */}
-                    <h1 className="text-xl font-bold text-[#1e1e1e] mb-2 leading-snug">
-                        Paratpara Satakam
-                    </h1>
+                        {/* Title */}
+                        <h1 className="text-xl font-bold text-[#1e1e1e] mb-2 leading-snug">
+                            Paratpara Satakam
+                        </h1>
 
-                    {/* Author */}
-                    <div className="text-sm text-gray-900 font-medium mb-6">
-                        Original Title by <span className="text-blue-600 hover:underline cursor-pointer">Paratpara Admin</span>
-                    </div>
+                        {/* Author */}
+                        <div className="text-sm text-gray-900 font-medium mb-6">
+                            Original Title by <span className="text-blue-600 hover:underline cursor-pointer">Paratpara Admin</span>
+                        </div>
 
-                    {/* Document Info Section */}
-                    <div className="mb-6">
-                        <h3 className="uppercase text-[11px] font-bold text-gray-500 mb-3 tracking-widest border-b border-gray-100 pb-2">
-                            Document Information
-                        </h3>
-                        <div className="space-y-3">
-                            <div className="flex items-start gap-2">
-                                <span className="mt-0.5 text-emerald-600"><Sparkles size={14} /></span>
-                                <div>
-                                    <p className="text-xs font-bold text-gray-700">AI-enhanced title</p>
+                        {/* Document Info Section */}
+                        <div className="mb-6">
+                            <h3 className="uppercase text-[11px] font-bold text-gray-500 mb-3 tracking-widest border-b border-gray-100 pb-2">
+                                Document Information
+                            </h3>
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-2">
+                                    <span className="mt-0.5 text-emerald-600"><Sparkles size={14} /></span>
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-700">AI-enhanced title</p>
+                                    </div>
+                                </div>
+                                <div className="text-xs text-gray-500 space-y-1">
+                                    <p>Uploaded on Feb 14, 2026</p>
+                                    <p>A collection of devotional poems exploring the divine nature.</p>
                                 </div>
                             </div>
-                            <div className="text-xs text-gray-500 space-y-1">
-                                <p>Uploaded on Feb 14, 2026</p>
-                                <p>A collection of devotional poems exploring the divine nature.</p>
+                        </div>
+
+                        {/* Action Grid */}
+                        <div className="grid grid-cols-4 gap-2 mb-8">
+                            {/* Row 1 */}
+                            <ActionButton icon={<Download size={20} />} label="Download" />
+                            <ActionButton icon={<Bookmark size={20} />} label="Save" />
+                            <ActionButton icon={<Share2 size={20} />} label="Share" />
+                            <ActionButton icon={<ThumbsUp size={20} />} label="100%" />
+
+                            {/* Row 2 */}
+                            <ActionButton icon={<ThumbsDown size={20} />} label="0%" />
+                            <ActionButton icon={<Printer size={20} />} label="Print" />
+                            <ActionButton icon={<Code size={20} />} label="Embed" />
+                            <ActionButton icon={<Sparkles size={20} />} label="Ask AI" />
+
+                            {/* Report Flag */}
+                            <div className="col-span-1 flex flex-col items-center justify-center p-2 rounded hover:bg-gray-50 text-gray-400 gap-1 cursor-pointer transition-colors">
+                                <Flag size={18} />
+                                <span className="text-[10px] font-medium">Report</span>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Action Grid */}
-                    <div className="grid grid-cols-4 gap-2 mb-8">
-                        {/* Row 1 */}
-                        <ActionButton icon={<Download size={20} />} label="Download" />
-                        <ActionButton icon={<Bookmark size={20} />} label="Save" />
-                        <ActionButton icon={<Share2 size={20} />} label="Share" />
-                        <ActionButton icon={<ThumbsUp size={20} />} label="100%" />
-
-                        {/* Row 2 */}
-                        <ActionButton icon={<ThumbsDown size={20} />} label="0%" />
-                        <ActionButton icon={<Printer size={20} />} label="Print" />
-                        <ActionButton icon={<Code size={20} />} label="Embed" />
-                        <ActionButton icon={<Sparkles size={20} />} label="Ask AI" />
-
-                        {/* Report Flag */}
-                        <div className="col-span-1 flex flex-col items-center justify-center p-2 rounded hover:bg-gray-50 text-gray-400 gap-1 cursor-pointer transition-colors">
-                            <Flag size={18} />
-                            <span className="text-[10px] font-medium">Report</span>
-                        </div>
-                    </div>
-
-                </aside>
+                    </aside>
+                )}
 
                 {/* --------------------------------------------------------
                     COLUMN 2: Book Display (Center)
@@ -187,7 +216,19 @@ export default function DocumentViewerPage() {
                     <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-20 shadow-sm gap-4">
 
                         {/* Left: Green Download Button Group */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-4">
+                            {isFullScreen && (
+                                <Link href="/" className="hidden sm:block hover:opacity-80 transition-opacity">
+                                    <Image
+                                        src="/Title.png"
+                                        alt="Paratparasatakam"
+                                        width={140}
+                                        height={32}
+                                        className="h-7 w-auto object-contain"
+                                        priority
+                                    />
+                                </Link>
+                            )}
                             <div className="flex rounded-[4px] shadow-sm overflow-hidden">
                                 <button className="bg-[#20809D] hover:bg-[#18637a] text-white px-4 py-2 font-bold text-xs sm:text-sm flex items-center gap-2 transition-colors">
                                     <Download size={16} />
@@ -201,11 +242,116 @@ export default function DocumentViewerPage() {
                             <button className="p-2 text-gray-500 hover:text-gray-900 transition-colors" title="Bookmark">
                                 <Bookmark size={20} />
                             </button>
-                            <button className="p-2 text-gray-500 hover:text-gray-900 transition-colors" title="Share">
-                                <Share2 size={20} />
+                            <div className="relative">
+                                <button
+                                    className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                                    title="Share"
+                                    onClick={() => setIsShareOpen(!isShareOpen)}
+                                >
+                                    <Share2 size={20} />
+                                </button>
+
+                                {isShareOpen && (
+                                    <>
+                                        <div className="fixed inset-0 z-10" onClick={() => setIsShareOpen(false)} />
+                                        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-20 py-2 animate-in fade-in zoom-in-95 duration-200">
+                                            <a
+                                                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors"
+                                            >
+                                                <Facebook size={16} className="text-blue-600" />
+                                                <span>Facebook</span>
+                                            </a>
+                                            <a
+                                                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors"
+                                            >
+                                                <Linkedin size={16} className="text-blue-700" />
+                                                <span>LinkedIn</span>
+                                            </a>
+                                            <a
+                                                href={`mailto:?subject=Check out this book&body=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                                                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors"
+                                            >
+                                                <Mail size={16} className="text-gray-500" />
+                                                <span>Share via email</span>
+                                            </a>
+                                            <button
+                                                onClick={handleCopyLink}
+                                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left border-t border-gray-100 mt-1 pt-2"
+                                            >
+                                                {copied ? <Check size={16} className="text-green-600" /> : <Copy size={16} className="text-gray-500" />}
+                                                <span>{copied ? 'Copied!' : 'Copy link'}</span>
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                            <div className="relative">
+                                <button
+                                    className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                                    title="More options"
+                                    onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                                >
+                                    <MoreVertical size={20} />
+                                </button>
+
+                                {isMoreMenuOpen && (
+                                    <>
+                                        <div className="fixed inset-0 z-10" onClick={() => setIsMoreMenuOpen(false)} />
+                                        <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-20 py-2 animate-in fade-in zoom-in-95 duration-200">
+                                            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left">
+                                                <ThumbsUp size={16} />
+                                                <span>0% (0)</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left">
+                                                <ThumbsDown size={16} />
+                                                <span>0% (0)</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left border-t border-gray-100 mt-1 pt-2">
+                                                <Printer size={16} />
+                                                <span>Print</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left">
+                                                <Code size={16} />
+                                                <span>Embed</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left">
+                                                <Sparkles size={16} />
+                                                <span>Ask AI</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm transition-colors text-left border-t border-gray-100 mt-1 pt-2">
+                                                <Flag size={16} />
+                                                <span>Report</span>
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Center: Zoom Controls */}
+                        <div className="flex items-center justify-center gap-4 flex-1">
+                            <button
+                                className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                                title="Zoom Out"
+                                onClick={() => setScale(prev => Math.max(0.5, prev - 0.1))}
+                            >
+                                <ZoomOut size={20} />
                             </button>
-                            <button className="p-2 text-gray-500 hover:text-gray-900 transition-colors" title="More">
-                                <MoreVertical size={20} />
+                            <span className="text-sm font-medium text-gray-600 w-12 text-center">
+                                {Math.round(scale * 100)}%
+                            </span>
+                            <button
+                                className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                                title="Zoom In"
+                                onClick={() => setScale(prev => Math.min(2.0, prev + 0.1))}
+                            >
+                                <ZoomIn size={20} />
                             </button>
                         </div>
 
@@ -215,8 +361,15 @@ export default function DocumentViewerPage() {
                                 <Search size={16} className="text-gray-400" />
                                 <span className="text-sm text-gray-400 truncate">Find in document</span>
                             </div>
-                            <button className="p-2 text-gray-500 hover:text-gray-900" title="Fullscreen">
-                                <Maximize size={20} />
+
+                            {/* Zoom Controls */}
+
+                            <button
+                                className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+                                title={isFullScreen ? "Exit Fullscreen" : "Fullscreen"}
+                                onClick={() => setIsFullScreen(!isFullScreen)}
+                            >
+                                {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
                             </button>
                         </div>
                     </div>
@@ -319,6 +472,7 @@ export default function DocumentViewerPage() {
                                             <Page
                                                 pageNumber={index + 1}
                                                 width={Math.min(containerWidth - 60, 850)}
+                                                scale={scale}
                                                 className="rendering-sharp"
                                                 renderAnnotationLayer={false}
                                                 renderTextLayer={true}
@@ -340,38 +494,59 @@ export default function DocumentViewerPage() {
                 {/* --------------------------------------------------------
                     COLUMN 3: YouTube / Related (Right Sidebar)
                    -------------------------------------------------------- */}
-                <aside className="w-[320px] bg-white border-l border-gray-200 hidden xl:flex flex-col z-10">
-                    <div className="p-4 border-b border-gray-100">
-                        <h3 className="font-bold text-gray-700 text-sm">You might also like</h3>
-                    </div>
+                {!isFullScreen && (
+                    <aside className="w-[320px] bg-white border-l border-gray-200 hidden xl:flex flex-col z-10">
+                        <div className="p-4 border-b border-gray-100">
+                            <h3 className="font-bold text-gray-700 text-sm">You might also like</h3>
+                        </div>
 
-                    <div className="flex-1 overflow-y-auto p-4 space-y-6">
-                        {/* Placeholder for YouTube Tiles */}
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="group cursor-pointer">
-                                <div className="aspect-video bg-gray-100 rounded flex items-center justify-center mb-2 overflow-hidden relative">
-                                    {/* Placeholder Image/Icon */}
-                                    <div className="w-12 h-8 bg-red-600 rounded-[4px] flex items-center justify-center">
-                                        <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[8px] border-l-white border-b-[4px] border-b-transparent ml-0.5"></div>
+                        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+                            {[
+                                { id: "lr2CvvhUWi8", title: "Sri Nilayundu Padyam - Paratpara Satakam", duration: "3:45" },
+                                { id: "_SPZoVhHGMM", title: "Ennadu Bhadrabhudharamu - Paratpara Satakam", duration: "4:20" },
+                                { id: "z3zC-JJbYs4", title: "Ramuni Bhadrashiala - Paratpara Satakam", duration: "3:10" }
+                            ].map((video) => (
+                                <a
+                                    key={video.id}
+                                    href={`https://youtu.be/${video.id}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group cursor-pointer block"
+                                >
+                                    <div className="aspect-video bg-gray-100 rounded flex items-center justify-center mb-2 overflow-hidden relative">
+                                        {/* YouTube Thumbnail */}
+                                        <img
+                                            src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
+                                            alt={video.title}
+                                            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                                        />
+                                        {/* Play Icon Overlay */}
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="w-10 h-8 bg-red-600 rounded-[8px] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[8px] border-l-white border-b-[4px] border-b-transparent ml-0.5"></div>
+                                            </div>
+                                        </div>
+                                        {/* <span className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1 rounded">{video.duration}</span> */}
                                     </div>
-                                    <span className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1 rounded">10:00</span>
-                                </div>
-                                <div>
-                                    <h4 className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 leading-tight mb-1">
-                                        Explaining Paratpara Satakam | Part {i}
-                                    </h4>
-                                    <div className="text-xs text-gray-500">
-                                        Channel Name • 1.5K views
+                                    <div>
+                                        <h4 className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 leading-tight mb-1 line-clamp-2">
+                                            {video.title}
+                                        </h4>
+                                        <div className="text-xs text-gray-500">
+                                            Paratparasatakam • YouTube
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                                </a>
+                            ))}
+                        </div>
 
-                    <div className="p-4 border-t border-gray-100 bg-gray-50/50">
-                        <p className="text-xs text-center text-gray-400">Sponsored Content</p>
-                    </div>
-                </aside>
+                        <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+                            <a href="https://www.youtube.com/@Paratparasatakam" target="_blank" rel="noopener noreferrer" className="text-xs text-center text-blue-500 hover:text-blue-700 font-medium block">
+                                Check out our YouTube Channel
+                            </a>
+                        </div>
+                    </aside>
+                )}
 
             </div>
         </div>

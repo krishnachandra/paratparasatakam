@@ -19,6 +19,7 @@ interface AudioContextType {
     duration: number;
     currentTime: number;
     seek: (time: number) => void;
+    setIsPlaying: (playing: boolean) => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -167,7 +168,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
             setVolume,
             duration,
             currentTime,
-            seek
+            seek,
+            setIsPlaying: (playing: boolean) => setIsPlaying(playing)
         }}>
             {children}
         </AudioContext.Provider>

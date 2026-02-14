@@ -11,13 +11,13 @@ export function AudioPlayerLayoutWrapper() {
 
     // Stop audio on specific pages
     useEffect(() => {
-        if ((pathname === '/read' || pathname.startsWith('/read/') || pathname === '/viewer') && isPlaying) {
+        if ((pathname === '/read' || pathname.startsWith('/read/') || pathname === '/viewer' || pathname === '/padyams') && isPlaying) {
             togglePlay();
         }
     }, [pathname]); // Intentionally omitting isPlaying/togglePlay to avoid aggressive re-runs, or include them if stable
 
     // Hide player on specific pages
-    if (pathname === '/read' || pathname.startsWith('/read/') || pathname === '/viewer') {
+    if (pathname === '/read' || pathname.startsWith('/read/') || pathname === '/viewer' || pathname === '/padyams') {
         return null;
     }
 
