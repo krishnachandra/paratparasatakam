@@ -58,12 +58,22 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         audio.addEventListener('timeupdate', handleTimeUpdate);
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
 
-        const unlockAudio = () => {
+        const unlockAudio = (e: Event) => {
+            // Check if user clicked an interactive element
+            // We only want to start audio if clicking "background" or non-interactive areas
+            if (e.type === 'click' || e.type === 'touchstart') {
+                const target = e.target as HTMLElement;
+                // If clicked on button, link, or input, don't start auto-audio logic yet
+                if (target.closest('button, a, input, select, textarea, [role="button"]')) {
+                    return;
+                }
+            }
+
             if (audio.paused && currentTrack) {
                 audio.play().catch(e => console.log("Autoplay blocked, waiting for interaction", e));
                 setIsPlaying(true);
             }
-            // Remove listener once triggered
+            // Remove listener once triggered (only if we actually tried to play)
             window.removeEventListener('click', unlockAudio);
             window.removeEventListener('keydown', unlockAudio);
             window.removeEventListener('touchstart', unlockAudio);

@@ -34,7 +34,7 @@ export function Hero() {
                         transition={{ duration: 1, delay: 0.1 }}
                         className="relative flex justify-center items-center perspective-1000 md:w-1/2 shrink-0"
                     >
-                        <div className="relative" style={{ perspective: '1000px' }}>
+                        <Link href="/viewer" className="relative block" style={{ perspective: '1000px' }}>
                             <div style={{ transform: 'rotateY(-15deg)', transformOrigin: 'left center' }} className="transition-transform duration-700 ease-out hover:rotate-y-0 cursor-pointer">
                                 {/* Main book face */}
                                 <div className="relative w-[200px] h-[300px] md:w-[270px] md:h-[405px] bg-[#17769a] overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.3)] border border-[#125c78]/50">
@@ -85,7 +85,7 @@ export function Hero() {
 
                             {/* Shadow underneath */}
                             <div className="absolute bottom-[-25px] left-1/2 -translate-x-1/2 w-[70%] h-[15px] bg-black/20 blur-xl rounded-[100%]" />
-                        </div>
+                        </Link>
                     </motion.div>
 
                     {/* RIGHT HALF: Titles + Author */}
